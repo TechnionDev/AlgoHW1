@@ -4,7 +4,7 @@
 \begin_header
 \save_transient_properties true
 \origin unavailable
-\textclass article
+\textclass extarticle
 \use_default_options true
 \maintain_unincluded_children false
 \language english
@@ -29,6 +29,7 @@
 \bibtex_command default
 \index_command default
 \paperfontsize default
+\spacing single
 \use_hyperref false
 \papersize default
 \use_geometry false
@@ -44,6 +45,7 @@
 \use_package undertilde 1
 \cite_engine basic
 \cite_engine_type default
+\biblio_style plain
 \use_bibtopic false
 \use_indices false
 \paperorientation portrait
@@ -78,15 +80,58 @@
 \begin_layout Title
 
 \series bold
-\bar under
-Algo HW 1:
+\size giant
+Algo HW 1
 \end_layout
 
-\begin_layout Paragraph
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="2" columns="1">
+<features booktabs="true" tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0pt">
+<row topspace="2cm">
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
 
-\series bold
-\bar under
-Q1:
+\begin_layout Plain Layout
+
+\size large
+Dani Bondar - 20650856
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topspace="1cm">
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size large
+Gur Telem - 206631848
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Question 1
 \end_layout
 
 \begin_layout Enumerate
@@ -161,14 +206,15 @@ F
  E
 \end_layout
 
-\begin_layout Paragraph
+\begin_layout Standard
 \begin_inset Separator plain
 \end_inset
 
 
-\series bold
-\bar under
-Q2:
+\end_layout
+
+\begin_layout Section
+Question 2
 \end_layout
 
 \begin_layout Enumerate
@@ -198,15 +244,10 @@ False
 
 \end_layout
 
-\begin_layout Labeling
-\labelwidthstring 00.00.0000
-
-\series bold
-\bar under
-Q3:
+\begin_layout Section
+Question 3
 \end_layout
 
-\begin_deeper
 \begin_layout Subparagraph
 algorithm:
 \end_layout
@@ -231,9 +272,10 @@ Topological sorting algorithm
 
  - find the root vertices.
  if there more then one root vertex then stop the algorithm and return False.
- There is at list one root vertex - the graph is DAG and thus has no circles.
+ There is at list one root vertex - the graph is DAG and thus has no cycles.
 \end_layout
 
+\begin_deeper
 \begin_layout Enumerate
 after every removal of the edges check if there's more then one root in
  the graph - if there is, return False.
@@ -340,5 +382,155 @@ As was tough in the tutorial, the time complexity of the Topological sorting
 \end_layout
 
 \end_deeper
+\begin_layout Section
+Question 4
+\end_layout
+
+\begin_layout Standard
+Given a graph 
+\begin_inset Formula $G=\left(V,E\right)$
+\end_inset
+
+ and a node 
+\begin_inset Formula $s\in V$
+\end_inset
+
+, we'll return the length of the shortest cycle with an even number of nodes.
+\end_layout
+
+\begin_layout Description
+Idea
+\end_layout
+
+\begin_layout Standard
+We'll create a bigraph like so 
+\begin_inset Formula $G'=\left(V',E'\right)$
+\end_inset
+
+.
+ 
+\begin_inset Formula 
+\[
+V'=V\cup\left\{ v'\mid v\in V\backslash\left\{ s\right\} \right\} 
+\]
+
+\end_inset
+
+ Meaning, we'll create a duplicate for each node in 
+\begin_inset Formula $V$
+\end_inset
+
+, except for 
+\begin_inset Formula $s$
+\end_inset
+
+.
+ And
+\begin_inset Formula 
+\[
+E'=\left\{ \left(v,u'\right),\left(v',u\right)\mid v,u\in V\backslash\left\{ s\right\} \wedge\left(v,u\right)\in E\right\} \cup\left\{ \left(v',s\right),\left(s,u'\right)\mid u,v\in V\backslash\left\{ s\right\} \wedge\left(s,u\right),\left(v,s\right)\in E\right\} 
+\]
+
+\end_inset
+
+Meaning each original edge in 
+\begin_inset Formula $G$
+\end_inset
+
+, will appear as an edge from a tagged node to a non tagged node (or the
+ other way arround).
+ 
+\begin_inset Formula $s$
+\end_inset
+
+ only has a non-tagged version, so it has a special case.
+\end_layout
+
+\begin_layout Standard
+While building the graph 
+\begin_inset Formula $G'$
+\end_inset
+
+, for each edge 
+\begin_inset Formula $\left(v',s\right)\in E'$
+\end_inset
+
+ we add, we'll mark 
+\begin_inset Formula $v'\in V'$
+\end_inset
+
+ with a boolean flag to indicate it closes a cycle.
+\end_layout
+
+\begin_layout Standard
+Now, we can use the BFS algorithm to find the distances of each 
+\begin_inset Formula $v\in V'$
+\end_inset
+
+ from 
+\begin_inset Formula $s$
+\end_inset
+
+.
+ If at one of the iterations, we reached a node that is flagged to close
+ a cycle, we'll return the iteration number (first iteration is 
+\begin_inset Formula $1$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Description
+Complexity
+\end_layout
+
+\begin_layout Standard
+The runtime complexity of the algorithm is
+\begin_inset Formula 
+\[
+O\left(\underset{Building\,G'}{\underbrace{n+m}}+\underset{BFS}{\underbrace{2n+2m}}\right)=O\left(n+m\right)
+\]
+
+\end_inset
+
+This can actually be further optimized if we used the SCC algorithm to find
+ the only the SCC that contains 
+\begin_inset Formula $s$
+\end_inset
+
+.
+ The optimized solution would be 
+\begin_inset Formula $O\left(m\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+For that solution we start from 
+\begin_inset Formula $s$
+\end_inset
+
+ and stop when we need to need to start the next CC.
+ Thus, we're left with 
+\begin_inset Formula $O\left(m\right)$
+\end_inset
+
+ nodes so 
+\begin_inset Formula $\left|V'\right|=O\left(m\right)$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $O\left(n+m\right)=O\left(2m\right)=O\left(m\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Description
+Correctness
+\end_layout
+
 \end_body
 \end_document
