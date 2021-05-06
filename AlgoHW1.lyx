@@ -5,7 +5,37 @@
 \save_transient_properties true
 \origin unavailable
 \textclass extarticle
+\begin_preamble
+\usepackage{xcolor}
+\pagecolor[rgb]{0.17,0.17,0.17} %black
+\color[rgb]{1,1,1} %grey
+
+\newfontfamily\mylistingsfont{Space Mono}
+\definecolor{lbcolor}{rgb}{0.2,0.2,0.2}
+
+\usepackage{amsfonts}
+
+
+\newcommand{\me}[1]{\equiv_{#1}}
+\newcommand{\s}{\hspace{.15cm}}
+\newcommand{\bs}{\s\s,\s\s}
+\newcommand{\ms}[1]{\underline{#1:}\\\tab}
+\newcommand{\mypart}[1]{\centerline{\textbf{Part #1:}}}
+\newcommand{\tab}[1][1cm]{\hspace*{#1}}
+\newcommand{\denom}[1]{\frac{1}{#1}}
+\newcommand{\Rmat}[1]{\mathbb{R}^{#1x#1}}
+\newcommand{\inv}[1]{#1^{-1}}
+
+\newcommand{\lamf}[1]{\lambda x.[#1]}
+
+\title{modern algebra hw1}
+\end_preamble
 \use_default_options true
+\begin_modules
+theorems-ams
+eqs-within-sections
+figs-within-sections
+\end_modules
 \maintain_unincluded_children false
 \language english
 \language_package default
@@ -16,7 +46,7 @@
 \font_typewriter "default" "default"
 \font_math "auto" "auto"
 \font_default_family default
-\use_non_tex_fonts false
+\use_non_tex_fonts true
 \font_sc false
 \font_osf false
 \font_sf_scale 100 100
@@ -32,7 +62,7 @@
 \spacing single
 \use_hyperref false
 \papersize default
-\use_geometry false
+\use_geometry true
 \use_package amsmath 1
 \use_package amssymb 1
 \use_package cancel 1
@@ -57,17 +87,22 @@
 \shortcut idx
 \color #008000
 \end_index
+\leftmargin 1.5cm
+\topmargin 1cm
+\rightmargin 1cm
+\bottommargin 1.5cm
 \secnumdepth 3
 \tocdepth 3
-\paragraph_separation indent
-\paragraph_indentation default
+\paragraph_separation skip
+\defskip smallskip
 \is_math_indent 0
 \math_numbering_side default
 \quotes_style english
 \dynamic_quotes 0
 \papercolumns 1
-\papersides 1
-\paperpagestyle default
+\papersides 2
+\paperpagestyle plain
+\listings_params "basicstyle={\mylistingsfont},language={C++},backgroundcolor={\color{lbcolor}},showstringspaces=false"
 \tracking_changes false
 \output_changes false
 \html_math_output 0
@@ -97,7 +132,7 @@ Algo HW 1
 \begin_layout Plain Layout
 
 \size large
-Dani Bondar - 20650856
+Dani Bondar - 206560856
 \end_layout
 
 \end_inset
@@ -248,13 +283,21 @@ False
 Question 3
 \end_layout
 
-\begin_layout Subparagraph
-algorithm:
+\begin_layout Description
+Idea
 \end_layout
 
 \begin_layout Standard
-We will use the Topological sorting algorithm that was though in the tutorial
- that execute in a linear time complexity.
+Better solution: We first use topological sorting algorithm to sort the
+ node in the graph topologically.
+ Then, we run over the nodes and check if a two consecutive nodes in the
+ result, has an edge, iff they do, then there's a hamiltonian path.
+\end_layout
+
+\begin_layout Standard
+Old solution (didn't have time to modify the proof): We will use the Topological
+ sorting algorithm that was though in the tutorial that execute in a linear
+ time complexity.
  The only change from the original algorithm would be that now, the end
  result would be a queue of vertices in a topological order, instead of
  a function (a minor implementation detail).
@@ -285,8 +328,92 @@ after every removal of the edges check if there's more then one root in
 continue until there is no more vertices left.
 \end_layout
 
+\end_deeper
 \begin_layout Subparagraph
 Correctness: 
+\end_layout
+
+\begin_layout Proof
+New way: The fist direction is obvious, if there is an edge between two
+ consecutive nodes in the result, then this is the hamiltonian path.
+\end_layout
+
+\begin_layout Proof
+The second direction: if there are two consecutive nodes 
+\begin_inset Formula $v,u\in V$
+\end_inset
+
+ without an edge.
+ BWOD there's an hamiltonian path.
+\end_layout
+
+\begin_layout Proof
+I don't have enough time to explain enough but I'll try to fix as much as
+ I can.
+ The way re defined the algorithm, means we're backing from the recursion
+ when we can't continue, then we add the node to the sorted list.
+ Since the graph is cycleless, then there's a single hamiltonian path (I
+ think).
+ Thus, wlog, 
+\begin_inset Formula $v$
+\end_inset
+
+ is before 
+\begin_inset Formula $u$
+\end_inset
+
+ in the path.
+ Since 
+\begin_inset Formula $v,u$
+\end_inset
+
+ are consecutive and there's no edge between them, then it means that 
+\begin_inset Formula $v$
+\end_inset
+
+ is a node with out degree of 
+\begin_inset Formula $0$
+\end_inset
+
+.
+ Meaning it must be the last node in the hamiltonian path.
+ In contradiction to the 
+\begin_inset Formula $u$
+\end_inset
+
+ coming after 
+\begin_inset Formula $v$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+Regarding the only a single hamiltonian path.
+ If there were two different paths, then there must be a pair of node 
+\begin_inset Formula $u,v$
+\end_inset
+
+ that in the first path appear 
+\begin_inset Formula $u$
+\end_inset
+
+ and then 
+\begin_inset Formula $v$
+\end_inset
+
+, and in the second path, the other way around.
+ Other wise, you can look at each two consecutive nodes, and get the same
+ order of nodes, i.e.
+ the same path.
+\end_layout
+
+\begin_layout Proof
+This concludes the proof.
+\end_layout
+
+\begin_layout Standard
+Old proof:
 \end_layout
 
 \begin_layout Standard
@@ -375,13 +502,27 @@ Complexity:
 \begin_layout Standard
 As was tough in the tutorial, the time complexity of the Topological sorting
  algorithm is linear to the input graph - 
-\begin_inset Formula $O(V+E)$
+\begin_inset Formula $O(\left|V\right|+\left|E\right|)$
 \end_inset
 
 .
 \end_layout
 
-\end_deeper
+\begin_layout Standard
+Also we have 
+\begin_inset Formula $O\left(\left|V\right|\right)$
+\end_inset
+
+ to run over the sorted nodes which doesn't add to the complexity.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 Question 4
 \end_layout
@@ -480,6 +621,28 @@ Now, we can use the BFS algorithm to find the distances of each
 ).
 \end_layout
 
+\begin_layout Standard
+Note: To avoid modifying BFS (because we don't prove correctness for the
+ modified version), we can after the BFS run, get the 
+\begin_inset Formula $\min\left\{ d\left(v'\right)\mid v'\in V'\wedge\left(v',s\right)\in E'\right\} +1$
+\end_inset
+
+.
+ This will get the minimal length path to a node that points to 
+\begin_inset Formula $s$
+\end_inset
+
+ (
+\begin_inset Formula $+1$
+\end_inset
+
+ for the edge that gets us back to 
+\begin_inset Formula $s$
+\end_inset
+
+).
+\end_layout
+
 \begin_layout Description
 Complexity
 \end_layout
@@ -488,7 +651,7 @@ Complexity
 The runtime complexity of the algorithm is
 \begin_inset Formula 
 \[
-O\left(\underset{Building\,G'}{\underbrace{n+m}}+\underset{BFS}{\underbrace{2n+2m}}\right)=O\left(n+m\right)
+O\left(\underset{Building\,G'}{\underbrace{n+m}}+\underset{BFS}{\underbrace{2n+2m}}\right)=O\left(3n+3m\right)=O\left(n+m\right)
 \]
 
 \end_inset
@@ -526,10 +689,271 @@ For that solution we start from
 \end_inset
 
 .
+ Then we can continue with the algorithm in the idea normally with approximately
+ the same number of nodes and edges.
+ But let's not focus on that.
+ It's way too much work for this assignment.
+\end_layout
+
+\begin_layout Standard
+For the BFS we have 
+\begin_inset Formula $2n+2m$
+\end_inset
+
+ because we doubled the number of nodes and edges (almost).
+ Because each node (except 
+\begin_inset Formula $s$
+\end_inset
+
+) has a tagged version, and each edge 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+ in the original graph, has two versions in 
+\begin_inset Formula $G'$
+\end_inset
+
+ (
+\begin_inset Formula $\left(u',v\right),\left(u,v'\right)$
+\end_inset
+
+).
 \end_layout
 
 \begin_layout Description
 Correctness
+\end_layout
+
+\begin_layout Standard
+Let's put aside the optimization part.
+\end_layout
+
+\begin_layout Standard
+Like taught in the tutorial, path in a bigraph is of even length iff it
+ starts and ends in the same side.
+ So any cycle in our bigraph (ofc starts and ends in the same side) so we
+ just need to find the minimal length cycle in our bigraph.
+\end_layout
+
+\begin_layout Proof
+First, let's make sure what we have here is actually a bigraph.
+ The two parts of our bigraph are 
+\begin_inset Formula $\left\{ v'\mid v\in V\backslash\left\{ s\right\} \right\} $
+\end_inset
+
+ and 
+\begin_inset Formula $\left\{ v\in V\right\} $
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+Let 
+\begin_inset Formula $\left(v,u\right)\in E'$
+\end_inset
+
+.
+ And let's assume that 
+\begin_inset Formula $v\in V$
+\end_inset
+
+ (i.e.
+ un-tagged).
+ According to 
+\begin_inset Formula $E'$
+\end_inset
+
+'s definition, if 
+\begin_inset Formula $v=s$
+\end_inset
+
+, then 
+\begin_inset Formula $u$
+\end_inset
+
+ must be in the tagged side (see right part of the definition).
+\end_layout
+
+\begin_layout Proof
+If, on the other hand, 
+\begin_inset Formula $v\neq s$
+\end_inset
+
+, then it is only part of the edge of the form 
+\begin_inset Formula $\forall u\in V.\;\forall\left(v,u\right)\in E:\left(v,u'\right)$
+\end_inset
+
+ (see right part of the definition).
+\end_layout
+
+\begin_layout Proof
+Now, if 
+\begin_inset Formula $v\in V$
+\end_inset
+
+ (i.e.
+ 
+\begin_inset Formula $v$
+\end_inset
+
+ is tagged), then 
+\begin_inset Formula $\exists t\in V:v=t'\neq s$
+\end_inset
+
+.
+ But then, 
+\begin_inset Formula $v=t'$
+\end_inset
+
+ is only part of edge of the form 
+\begin_inset Formula $\forall u\in V.\;\forall\left(t,u\right)\in E:\left(t',u\right)$
+\end_inset
+
+.
+ Thus again 
+\begin_inset Formula $v,u$
+\end_inset
+
+ are in opposite sides of the bigraph.
+\end_layout
+
+\begin_layout Standard
+Now that we know the graph is a bigraph, and that we just need to find the
+ minimal cycle, we can run BFS until we encounter a node with the flag that
+ indicated it has an edge to 
+\begin_inset Formula $s$
+\end_inset
+
+.
+ This node must ofc be tagged but it's not relevant.
+\end_layout
+
+\begin_layout Standard
+We'll make sure to start the BFS from 
+\begin_inset Formula $s$
+\end_inset
+
+ (this is allowed to the freedom degree we have in the BFS).
+ The path we'll get (along with the edge from the final node 
+\begin_inset Formula $u$
+\end_inset
+
+ back to 
+\begin_inset Formula $s$
+\end_inset
+
+) is a cycle (and as mentioned before, of even length).
+\end_layout
+
+\begin_layout Proof
+Let's prove that the cycle is truly the shortest cycle.
+\end_layout
+
+\begin_layout Proof
+Let's assume that we found a cycle (i.e.
+ a node with the cycle flag on) in the 
+\begin_inset Formula $k$
+\end_inset
+
+-th iteration of BFS.
+ BWOC, there's a shorter cycle.
+\end_layout
+
+\begin_layout Proof
+Let's assume that the last node (the one before 
+\begin_inset Formula $s$
+\end_inset
+
+ again) in the cycle we found is 
+\begin_inset Formula $u$
+\end_inset
+
+.
+ Now let's assume that the last node in the shortest cycle (different one
+ because of the assumption) is 
+\begin_inset Formula $v$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+Since we found 
+\begin_inset Formula $u$
+\end_inset
+
+ in the 
+\begin_inset Formula $k$
+\end_inset
+
+-th iteration (and this is the first cycle we found), its distance from
+ 
+\begin_inset Formula $s$
+\end_inset
+
+ is 
+\begin_inset Formula $k$
+\end_inset
+
+ (
+\begin_inset Formula $\pm1$
+\end_inset
+
+ depending on how you count).
+ But 
+\begin_inset Formula $v$
+\end_inset
+
+ is a shorter cycle, so the distance of 
+\begin_inset Formula $v$
+\end_inset
+
+ from 
+\begin_inset Formula $s$
+\end_inset
+
+ (marked 
+\begin_inset Formula $k'$
+\end_inset
+
+) must be 
+\begin_inset Formula $k'<k$
+\end_inset
+
+.
+ Meaning we already found the node 
+\begin_inset Formula $v$
+\end_inset
+
+ before finding 
+\begin_inset Formula $u$
+\end_inset
+
+.
+ This means we found a cycle ending in 
+\begin_inset Formula $s$
+\end_inset
+
+ before the 
+\begin_inset Formula $k$
+\end_inset
+
+-th iteration.
+ In contradiction to the first cycle found in the 
+\begin_inset Formula $k$
+\end_inset
+
+-th iteration.
+\end_layout
+
+\begin_layout Standard
+Since the cycle is minimal, 
+\begin_inset Formula $s$
+\end_inset
+
+ appears in it only once, because if it appeared twice, we could've just
+ ended the cycle on the first appearance and ended up with a shorter cycle.
 \end_layout
 
 \end_body
